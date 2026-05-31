@@ -119,3 +119,78 @@ WHERE join_date >= '2024-01-01'
 ```
 
 This version allows MySQL to use the index on `join_date` efficiently because the column is compared directly without applying any function.
+
+---
+
+## Section D
+
+### Q22. Explain the difference between LEFT JOIN and RIGHT JOIN. When would you use a FULL OUTER JOIN?
+
+#### Answer
+
+A **LEFT JOIN** returns all rows from the left table and the matching rows from the right table. If no matching record exists in the right table, NULL values are returned for the right table columns.
+
+#### Example of LEFT JOIN
+
+```sql
+SELECT *
+FROM customers c
+LEFT JOIN orders o
+ON c.customer_id = o.customer_id;
+```
+
+This query displays all customers, including customers who have never placed an order.
+
+#### RIGHT JOIN
+
+A **RIGHT JOIN** returns all rows from the right table and the matching rows from the left table. If no matching record exists in the left table, NULL values are returned for the left table columns.
+
+#### Example of RIGHT JOIN
+
+```sql
+SELECT *
+FROM customers c
+RIGHT JOIN orders o
+ON c.customer_id = o.customer_id;
+```
+
+This query displays all orders, including any orders that do not have matching customer information.
+
+#### FULL OUTER JOIN
+
+A **FULL OUTER JOIN** returns all rows from both tables. Matching rows are combined, while non-matching rows from either table are returned with NULL values in the missing columns.
+
+A FULL OUTER JOIN is useful when you want to see every record from both tables regardless of whether a matching record exists.
+
+---
+
+### Q23. Identify all Foreign Key relationships in the schema. Explain what would happen if you tried to insert an order with customer_id = 999 (which doesn't exist in customers).
+
+#### Foreign Key Relationships
+
+1. `orders.customer_id` → `customers.customer_id`
+
+2. `order_items.order_id` → `orders.order_id`
+
+3. `order_items.product_id` → `products.product_id`
+
+#### Example Query
+
+```sql
+INSERT INTO orders
+VALUES (
+    9999,
+    999,
+    '2024-08-15',
+    5000,
+    'Delivered'
+);
+```
+
+#### Result
+
+The insertion will fail because `customer_id = 999` does not exist in the `customers` table.
+
+The Foreign Key constraint enforces referential integrity by ensuring that every customer referenced in the `orders` table already exists in the `customers` table.
+
+MySQL will return a Foreign Key constraint violation error and reject the insertion.

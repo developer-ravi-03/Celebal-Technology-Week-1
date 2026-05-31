@@ -101,3 +101,43 @@ SELECT category,
 FROM products
 GROUP BY category
 HAVING AVG(unit_price) > 2000;
+
+-- =====================
+-- SECTION D
+-- =====================
+
+-- Q19. Display each order along with customer details.
+SELECT
+    o.order_id,
+    o.order_date,
+    c.first_name,
+    c.last_name,
+    o.total_amount
+FROM orders o
+INNER JOIN customers c
+ON o.customer_id = c.customer_id;
+
+-- Q20. List all customers and their orders (if any).
+SELECT
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    o.order_id,
+    o.order_date,
+    o.total_amount
+FROM customers c
+LEFT JOIN orders o
+ON c.customer_id = o.customer_id;
+
+-- Q21. Display order details using three-table join.
+SELECT
+    o.order_id,
+    p.product_name,
+    oi.quantity,
+    p.unit_price,
+    oi.discount_pct
+FROM orders o
+INNER JOIN order_items oi
+    ON o.order_id = oi.order_id
+INNER JOIN products p
+    ON oi.product_id = p.product_id;
